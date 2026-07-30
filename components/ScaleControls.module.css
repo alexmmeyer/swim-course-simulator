@@ -1,0 +1,98 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--saa-blue);
+  letter-spacing: 0.02em;
+}
+
+.hint {
+  color: var(--saa-muted);
+  font-size: 0.95rem;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.65rem 0.85rem;
+  background: var(--saa-surface);
+  border: 1px solid var(--saa-border);
+}
+
+.labelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.label {
+  font-weight: 700;
+  color: var(--saa-navy);
+}
+
+.source {
+  font-size: 0.8rem;
+  color: var(--saa-muted);
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.step {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--saa-border);
+  background: var(--saa-white);
+  color: var(--saa-blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.step:hover {
+  border-color: var(--saa-blue);
+}
+
+.numberInput {
+  width: 4.5rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--saa-border);
+  color: var(--saa-navy);
+  background: var(--saa-white);
+  border-radius: 2px;
+}
+
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numberInput[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
