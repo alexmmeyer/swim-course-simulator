@@ -1,0 +1,168 @@
+.playback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--saa-blue);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.linkBtn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--saa-blue);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+}
+
+.transport {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.primary,
+.secondary {
+  appearance: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.primary {
+  border: 1px solid var(--saa-blue);
+  background: var(--saa-blue);
+  color: var(--saa-white);
+  min-width: 5.5rem;
+}
+
+.primary:hover {
+  background: var(--saa-navy);
+}
+
+.secondary {
+  border: 1px solid var(--saa-border);
+  background: var(--saa-white);
+  color: var(--saa-navy);
+}
+
+.secondary:hover {
+  background: var(--saa-surface);
+}
+
+.speed {
+  border: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+  padding: 0;
+  margin: 0;
+}
+
+.legend {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--saa-muted);
+  padding: 0;
+  margin-right: 0.25rem;
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--saa-navy);
+  cursor: pointer;
+}
+
+.timelineBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.timeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--saa-muted);
+  font-weight: 600;
+}
+
+.track {
+  position: relative;
+  height: 1.1rem;
+  background: var(--saa-grid);
+  border: 1px solid var(--saa-border);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.trackFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--saa-blue) 28%, transparent);
+  pointer-events: none;
+}
+
+.playhead {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--saa-red);
+  pointer-events: none;
+}
+
+.playhead::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid var(--saa-red);
+}
+
+.scrubHint {
+  font-size: 0.8rem;
+  color: var(--saa-muted);
+}
+
+.empty {
+  color: var(--saa-muted);
+  font-size: 0.95rem;
+  padding: 1.5rem 0.5rem;
+}

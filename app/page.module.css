@@ -64,9 +64,44 @@
 .chartPanel {
   background: var(--saa-white);
   border: 1px solid var(--saa-border);
-  padding: 1rem 0.75rem 0.75rem;
+  padding: 0.75rem 0.75rem 0.75rem;
   position: sticky;
   top: 1rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--saa-border);
+  margin: 0 0 0.75rem;
+}
+
+.tab,
+.tabActive {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+  color: var(--saa-muted);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tab:hover {
+  color: var(--saa-navy);
+}
+
+.tabActive {
+  color: var(--saa-blue);
+  border-bottom-color: var(--saa-red);
+}
+
+.tabPanel {
+  min-height: 12rem;
 }
 
 .footer {

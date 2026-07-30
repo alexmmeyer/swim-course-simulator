@@ -1,0 +1,16 @@
+.empty {
+  padding: 1.25rem 0.5rem 1.5rem;
+  color: var(--saa-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.emptyTitle {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--saa-blue);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}

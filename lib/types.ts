@@ -31,3 +31,36 @@ export type ChartPoint = {
   total: number;
   [distance: string]: number | string;
 };
+
+/** Normalized canvas coordinates (0..1). */
+export type Point2D = {
+  x: number;
+  y: number;
+};
+
+/** Closed lap path; points do not duplicate the start vertex. */
+export type CoursePath = {
+  id: string;
+  points: Point2D[];
+};
+
+export type DistanceCourseConfig = {
+  distance: string;
+  pathId: string;
+  laps: number;
+  /** Physical length of one drawn lap, in feet */
+  lapLengthFeet: number;
+};
+
+export type SimSwimmer = {
+  id: string;
+  distance: string;
+  startMinutes: number;
+  finishMinutes: number;
+  /** Perpendicular offset from path centerline (feet) */
+  lateralFeet: number;
+  /** Along-track offset for pack depth at start (feet) */
+  alongFeet: number;
+};
+
+export type LengthUnit = "miles" | "yards" | "meters";

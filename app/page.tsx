@@ -4,14 +4,22 @@ import { CourseChart } from "@/components/CourseChart";
 import { CsvUpload } from "@/components/CsvUpload";
 import { ScaleControls } from "@/components/ScaleControls";
 import { StartTimeControls } from "@/components/StartTimeControls";
+import { SimulatorPanel } from "@/components/simulator/SimulatorPanel";
 import {
   DEFAULT_START_MINUTES,
   buildCourseSeries,
 } from "@/lib/courseModel";
 import { parseParticipantCsv } from "@/lib/parseCsv";
-import type { DistanceConfig, Participant } from "@/lib/types";
+import type {
+  CoursePath,
+  DistanceConfig,
+  DistanceCourseConfig,
+  Participant,
+} from "@/lib/types";
 import { useMemo, useState } from "react";
 import styles from "./page.module.css";
+
+type MainTab = "density" | "simulator";
 
 export default function Home() {
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -23,6 +31,23 @@ export default function Home() {
   const [parseErrors, setParseErrors] = useState<string[]>([]);
   const [summary, setSummary] = useState<string | null>(null);
 
+  const [mainTab, setMainTab] = useState<MainTab>("density");
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState<string | null>(
+    null,
+  );
+  const [backgroundFileName, setBackgroundFileName] = useState<string | null>(
+    null,
+  );
+  const [paths, setPaths] = useState<CoursePath[]>([]);
+  const [courseByDistance, setCourseByDistance] = useState<
+    Record<string, DistanceCourseConfig>
+  >({});
+
+  function clearCourseGeometry() {
+    setPaths([]);
+    setCourseByDistance({});
+  }
+
   function applyParse(text: string, name: string) {
     if (!text.trim()) {
       setParticipants([]);
@@ -33,6 +58,7 @@ export default function Home() {
       setFileName(name || null);
       setParseErrors(["Could not read a CSV file. Please upload a .csv."]);
       setSummary(null);
+      clearCourseGeometry();
       return;
     }
 
@@ -51,6 +77,7 @@ export default function Home() {
     }
     setStartTimes(nextStarts);
     setScaleCounts(nextScales);
+    clearCourseGeometry();
 
     if (result.participants.length) {
       const parts = result.distances.map(
@@ -122,7 +149,55 @@ export default function Home() {
         </div>
 
         <div className={styles.chartPanel}>
-          <CourseChart points={series.points} distances={series.distances} />
+          <div className={styles.tabs} role="tablist" aria-label="Main view">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mainTab === "density"}
+              className={
+                mainTab === "density" ? styles.tabActive : styles.tab
+              }
+              onClick={() => setMainTab("density")}
+            >
+              Density chart
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mainTab === "simulator"}
+              className={
+                mainTab === "simulator" ? styles.tabActive : styles.tab
+              }
+              onClick={() => setMainTab("simulator")}
+            >
+              Congestion simulator
+            </button>
+          </div>
+
+          <div className={styles.tabPanel} role="tabpanel">
+            {mainTab === "density" ? (
+              <CourseChart
+                points={series.points}
+                distances={series.distances}
+              />
+            ) : (
+              <SimulatorPanel
+                participants={participants}
+                configs={configs}
+                distances={distances}
+                backgroundImageUrl={backgroundImageUrl}
+                backgroundFileName={backgroundFileName}
+                onBackground={(url, name) => {
+                  setBackgroundImageUrl(url);
+                  setBackgroundFileName(name);
+                }}
+                paths={paths}
+                courseByDistance={courseByDistance}
+                onPathsChange={setPaths}
+                onCourseByDistanceChange={setCourseByDistance}
+              />
+            )}
+          </div>
         </div>
       </main>
 

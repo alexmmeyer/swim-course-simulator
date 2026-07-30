@@ -1,0 +1,53 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.uploadBtn {
+  appearance: none;
+  border: 1px solid var(--saa-blue);
+  background: var(--saa-white);
+  color: var(--saa-blue);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.uploadBtn:hover {
+  background: var(--saa-surface);
+}
+
+.hidden {
+  display: none;
+}
+
+.fileName {
+  font-size: 0.85rem;
+  color: var(--saa-blue);
+  font-weight: 600;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clearBtn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--saa-red);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--saa-muted);
+}

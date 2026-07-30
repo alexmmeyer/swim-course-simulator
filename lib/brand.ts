@@ -7,6 +7,9 @@ export const brand = {
   border: "#d5dde8",
   surface: "#f4f7fb",
   grid: "#e6ebf2",
+  /** Course vertex markers (buoys / start) */
+  buoyOrange: "#f36c3d",
+  canvasWater: "#c5e4f5",
 } as const;
 
 /** On-brand distance series colors (blue/red family). */
