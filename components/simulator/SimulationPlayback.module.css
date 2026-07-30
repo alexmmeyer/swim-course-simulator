@@ -78,6 +78,28 @@
   background: var(--saa-surface);
 }
 
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.exportStatus {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--saa-navy);
+}
+
+.exportHint {
+  font-weight: 500;
+  color: var(--saa-muted);
+}
+
+.exportError {
+  font-size: 0.875rem;
+  color: var(--saa-red);
+}
+
 .speed {
   border: none;
   display: flex;

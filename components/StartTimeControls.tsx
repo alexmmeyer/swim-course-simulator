@@ -34,7 +34,7 @@ export function StartTimeControls({ distances, startTimes, onChange }: Props) {
                   type="button"
                   className={styles.step}
                   aria-label={`Earlier start for ${distance}`}
-                  onClick={() => onChange(distance, clampMinutes(minutes - 1))}
+                  onClick={() => onChange(distance, clampMinutes(minutes - 5))}
                 >
                   −
                 </button>
@@ -52,7 +52,7 @@ export function StartTimeControls({ distances, startTimes, onChange }: Props) {
                   type="button"
                   className={styles.step}
                   aria-label={`Later start for ${distance}`}
-                  onClick={() => onChange(distance, clampMinutes(minutes + 1))}
+                  onClick={() => onChange(distance, clampMinutes(minutes + 5))}
                 >
                   +
                 </button>

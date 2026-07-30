@@ -3,6 +3,11 @@
 import { colorForDistance } from "@/lib/brand";
 import { formatClock, orderedDistances } from "@/lib/courseModel";
 import {
+  canExportVideo,
+  downloadBlob,
+  exportSimulationVideo,
+} from "@/lib/exportVideo";
+import {
   averagePersonDiameterNorm,
   buildSimRoster,
   eventWindow,
@@ -79,6 +84,10 @@ export function SimulationPlayback({
   const [simTime, setSimTime] = useState(timeWindow?.start ?? 0);
   const [scrubbing, setScrubbing] = useState(false);
   const [dotScale, setDotScale] = useState(DEFAULT_DOT_SCALE);
+  const [exporting, setExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const exportAbortRef = useRef<AbortController | null>(null);
   const [windowEpoch, setWindowEpoch] = useState(
     () =>
       timeWindow ? `${timeWindow.start}:${timeWindow.end}` : "none",
@@ -119,7 +128,7 @@ export function SimulationPlayback({
   });
 
   useEffect(() => {
-    if (!playing || scrubbing) {
+    if (!playing || scrubbing || exporting) {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
       lastTsRef.current = null;
@@ -133,7 +142,7 @@ export function SimulationPlayback({
     return () => {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
-  }, [playing, scrubbing, speed]);
+  }, [playing, scrubbing, speed, exporting]);
 
   const dots: SwimmerDot[] = useMemo(() => {
     const result: SwimmerDot[] = [];
@@ -171,6 +180,69 @@ export function SimulationPlayback({
     setSimTime(timeWindow.start);
     setPlaying(false);
     lastTsRef.current = null;
+  }
+
+  async function handleExportVideo() {
+    if (!timeWindow || exporting) return;
+    if (!canExportVideo()) {
+      setExportError("Video export is not supported in this browser.");
+      return;
+    }
+
+    setPlaying(false);
+    setExportError(null);
+    setExporting(true);
+    setExportProgress(0);
+    setSimTime(timeWindow.start);
+
+    const abort = new AbortController();
+    exportAbortRef.current = abort;
+
+    const colorByDistance: Record<string, string> = {};
+    legendDistances.forEach((d, i) => {
+      colorByDistance[d] = colorForDistance(i);
+    });
+
+    try {
+      const result = await exportSimulationVideo({
+        paths,
+        courseByDistance,
+        roster,
+        colorByDistance,
+        backgroundImageUrl,
+        legend: legendDistances.map((d, i) => ({
+          distance: d,
+          color: colorForDistance(i),
+        })),
+        windowStart: timeWindow.start,
+        windowEnd: timeWindow.end,
+        playbackSeconds: PLAYBACK_SECONDS[speed],
+        dotDiameterNorm,
+        onProgress: (ratio, t) => {
+          setExportProgress(ratio);
+          setSimTime(t);
+        },
+        signal: abort.signal,
+      });
+      downloadBlob(result.blob, result.filename);
+      setSimTime(timeWindow.end);
+      setExportProgress(1);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setExportError(null);
+      } else {
+        setExportError(
+          err instanceof Error ? err.message : "Video export failed.",
+        );
+      }
+    } finally {
+      exportAbortRef.current = null;
+      setExporting(false);
+    }
+  }
+
+  function cancelExport() {
+    exportAbortRef.current?.abort();
   }
 
   function timeFromClientX(clientX: number): number | null {
@@ -256,15 +328,44 @@ export function SimulationPlayback({
             type="button"
             className={styles.primary}
             onClick={() => setPlaying((p) => !p)}
+            disabled={exporting}
           >
             {playing ? "Pause" : "Play"}
           </button>
-          <button type="button" className={styles.secondary} onClick={restart}>
+          <button
+            type="button"
+            className={styles.secondary}
+            onClick={restart}
+            disabled={exporting}
+          >
             Restart
           </button>
+          {exporting ? (
+            <button
+              type="button"
+              className={styles.secondary}
+              onClick={cancelExport}
+            >
+              Cancel export
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.secondary}
+              onClick={() => void handleExportVideo()}
+              disabled={!canExportVideo()}
+              title={
+                canExportVideo()
+                  ? "Download the simulation as a video (WebM or MP4)"
+                  : "Video export is not supported in this browser"
+              }
+            >
+              Export video
+            </button>
+          )}
         </div>
 
-        <fieldset className={styles.speed}>
+        <fieldset className={styles.speed} disabled={exporting}>
           <legend className={styles.legend}>Speed</legend>
           {(
             [
@@ -287,6 +388,17 @@ export function SimulationPlayback({
         </fieldset>
       </div>
 
+      {exporting && (
+        <p className={styles.exportStatus} aria-live="polite">
+          Exporting video… {Math.round(exportProgress * 100)}%
+          <span className={styles.exportHint}>
+            {" "}
+            Uses the selected speed ({PLAYBACK_SECONDS[speed]}s).
+          </span>
+        </p>
+      )}
+      {exportError && <p className={styles.exportError}>{exportError}</p>}
+
       <label className={styles.dotSize}>
         <span className={styles.dotSizeLabel}>Dot size</span>
         <input
@@ -297,6 +409,7 @@ export function SimulationPlayback({
           value={dotScale}
           onChange={(e) => setDotScale(Number(e.target.value))}
           aria-valuetext={`${dotScale}`}
+          disabled={exporting}
         />
         <span className={styles.dotSizeValue}>{dotScale}×</span>
       </label>
@@ -310,6 +423,7 @@ export function SimulationPlayback({
           ref={trackRef}
           className={styles.track}
           onPointerDown={(e) => {
+            if (exporting) return;
             e.currentTarget.setPointerCapture(e.pointerId);
             beginScrub(e.clientX);
           }}
@@ -318,7 +432,8 @@ export function SimulationPlayback({
           aria-valuemax={timeWindow.end}
           aria-valuenow={simTime}
           aria-label="Simulation time"
-          tabIndex={0}
+          aria-disabled={exporting}
+          tabIndex={exporting ? -1 : 0}
           onKeyDown={(e) => {
             const step = span / 100;
             if (e.key === "ArrowLeft") {
