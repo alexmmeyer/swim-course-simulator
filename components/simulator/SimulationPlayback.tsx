@@ -33,7 +33,7 @@ const PLAYBACK_SECONDS: Record<Speed, number> = {
 };
 
 /** Multiplier on the 6′ physical-scale diameter (slider). */
-const DEFAULT_DOT_SCALE = 5;
+const DEFAULT_DOT_SCALE = 3;
 
 type Props = {
   participants: Participant[];
