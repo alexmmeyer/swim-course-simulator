@@ -161,6 +161,59 @@
   color: var(--saa-muted);
 }
 
+.distanceLegend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--saa-navy);
+}
+
+.legendSwatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dotSize {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: var(--saa-navy);
+}
+
+.dotSizeLabel {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--saa-muted);
+  white-space: nowrap;
+}
+
+.dotSize input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--saa-blue);
+}
+
+.dotSizeValue {
+  font-weight: 600;
+  min-width: 2.25rem;
+  text-align: right;
+  color: var(--saa-muted);
+}
+
 .empty {
   color: var(--saa-muted);
   font-size: 0.95rem;

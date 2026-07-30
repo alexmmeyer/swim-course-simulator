@@ -1,7 +1,7 @@
 "use client";
 
 import { colorForDistance } from "@/lib/brand";
-import { formatClock } from "@/lib/courseModel";
+import { formatClock, orderedDistances } from "@/lib/courseModel";
 import {
   averagePersonDiameterNorm,
   buildSimRoster,
@@ -27,10 +27,13 @@ import styles from "./SimulationPlayback.module.css";
 type Speed = "fast" | "medium" | "slow";
 
 const PLAYBACK_SECONDS: Record<Speed, number> = {
-  fast: 10,
-  medium: 20,
-  slow: 30,
+  fast: 20,
+  medium: 40,
+  slow: 60,
 };
+
+/** Multiplier on the 6′ physical-scale diameter (slider). */
+const DEFAULT_DOT_SCALE = 5;
 
 type Props = {
   participants: Participant[];
@@ -59,18 +62,23 @@ export function SimulationPlayback({
   );
 
   const pathMap = useMemo(() => new Map(paths.map((p) => [p.id, p])), [paths]);
+  const legendDistances = useMemo(
+    () => orderedDistances(configs),
+    [configs],
+  );
   const distanceIndex = useMemo(() => {
     const map: Record<string, number> = {};
-    configs.forEach((c, i) => {
-      map[c.distance] = i;
+    legendDistances.forEach((d, i) => {
+      map[d] = i;
     });
     return map;
-  }, [configs]);
+  }, [legendDistances]);
 
   const [speed, setSpeed] = useState<Speed>("medium");
   const [playing, setPlaying] = useState(false);
   const [simTime, setSimTime] = useState(timeWindow?.start ?? 0);
   const [scrubbing, setScrubbing] = useState(false);
+  const [dotScale, setDotScale] = useState(DEFAULT_DOT_SCALE);
   const [windowEpoch, setWindowEpoch] = useState(
     () =>
       timeWindow ? `${timeWindow.start}:${timeWindow.end}` : "none",
@@ -152,10 +160,11 @@ export function SimulationPlayback({
     return result;
   }, [roster, courseByDistance, pathMap, simTime, distanceIndex]);
 
-  const dotDiameterNorm = useMemo(
+  const baseDiameterNorm = useMemo(
     () => averagePersonDiameterNorm(paths, courseByDistance),
     [paths, courseByDistance],
   );
+  const dotDiameterNorm = baseDiameterNorm * dotScale;
 
   function restart() {
     if (!timeWindow) return;
@@ -229,6 +238,18 @@ export function SimulationPlayback({
         interactive={false}
       />
 
+      <ul className={styles.distanceLegend} aria-label="Distance colors">
+        {legendDistances.map((d, i) => (
+          <li key={d} className={styles.legendItem}>
+            <span
+              className={styles.legendSwatch}
+              style={{ background: colorForDistance(i) }}
+            />
+            <span>{d}</span>
+          </li>
+        ))}
+      </ul>
+
       <div className={styles.controls}>
         <div className={styles.transport}>
           <button
@@ -247,9 +268,9 @@ export function SimulationPlayback({
           <legend className={styles.legend}>Speed</legend>
           {(
             [
-              ["fast", "Fast (10s)"],
-              ["medium", "Medium (20s)"],
-              ["slow", "Slow (30s)"],
+              ["fast", "Fast (20s)"],
+              ["medium", "Medium (40s)"],
+              ["slow", "Slow (60s)"],
             ] as const
           ).map(([value, label]) => (
             <label key={value} className={styles.radio}>
@@ -265,6 +286,20 @@ export function SimulationPlayback({
           ))}
         </fieldset>
       </div>
+
+      <label className={styles.dotSize}>
+        <span className={styles.dotSizeLabel}>Dot size</span>
+        <input
+          type="range"
+          min={1}
+          max={10}
+          step={1}
+          value={dotScale}
+          onChange={(e) => setDotScale(Number(e.target.value))}
+          aria-valuetext={`${dotScale}`}
+        />
+        <span className={styles.dotSizeValue}>{dotScale}×</span>
+      </label>
 
       <div className={styles.timelineBlock}>
         <div className={styles.timeLabels}>

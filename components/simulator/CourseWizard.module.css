@@ -117,6 +117,12 @@
   background: var(--saa-white);
 }
 
+.input:disabled {
+  background: var(--saa-surface);
+  color: var(--saa-muted);
+  cursor: not-allowed;
+}
+
 .error {
   color: var(--saa-red);
   font-size: 0.85rem;

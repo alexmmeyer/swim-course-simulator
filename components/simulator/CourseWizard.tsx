@@ -291,8 +291,17 @@ export function CourseWizard({
           }}
         >
           <p className={styles.hint}>
-            Lap closed for <strong>{distance}</strong>. Enter the physical length of one lap and
-            how many laps this distance swims.
+            {phase.isNewPath ? (
+              <>
+                Lap closed for <strong>{distance}</strong>. Enter the physical length of one lap
+                and how many laps this distance swims.
+              </>
+            ) : (
+              <>
+                Reusing the same course for <strong>{distance}</strong>. Lap length is locked —
+                set how many laps this distance swims.
+              </>
+            )}
           </p>
           <div className={styles.formRow}>
             <label className={styles.label}>
@@ -305,6 +314,8 @@ export function CourseWizard({
                 value={lapLength}
                 onChange={(e) => setLapLength(e.target.value)}
                 required
+                disabled={!phase.isNewPath}
+                readOnly={!phase.isNewPath}
               />
             </label>
             <label className={styles.label}>
@@ -313,6 +324,7 @@ export function CourseWizard({
                 className={styles.input}
                 value={unit}
                 onChange={(e) => setUnit(e.target.value as LengthUnit)}
+                disabled={!phase.isNewPath}
               >
                 <option value="miles">Miles</option>
                 <option value="yards">Yards</option>
@@ -334,19 +346,21 @@ export function CourseWizard({
           </div>
           {formError && <p className={styles.error}>{formError}</p>}
           <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={() => {
-                setPhase({
-                  kind: "draw",
-                  distanceIndex: phase.distanceIndex,
-                  draft: phase.isNewPath ? phase.points : [],
-                });
-              }}
-            >
-              Redraw
-            </button>
+            {phase.isNewPath && (
+              <button
+                type="button"
+                className={styles.secondary}
+                onClick={() => {
+                  setPhase({
+                    kind: "draw",
+                    distanceIndex: phase.distanceIndex,
+                    draft: phase.points,
+                  });
+                }}
+              >
+                Redraw
+              </button>
+            )}
             <button type="submit" className={styles.primary}>
               {phase.distanceIndex + 1 >= distances.length
                 ? "Save & simulate"

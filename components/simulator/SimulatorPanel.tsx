@@ -62,7 +62,6 @@ export function SimulatorPanel({
   if (showWizard) {
     return (
       <CourseWizard
-        key={`wizard-${distances.join("|")}-${Object.keys(courseByDistance).length === 0 ? "new" : "resume"}`}
         distances={distances}
         backgroundImageUrl={backgroundImageUrl}
         backgroundFileName={backgroundFileName}
