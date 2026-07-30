@@ -2,7 +2,6 @@
 
 import {
   clampMinutes,
-  formatClock,
   minutesToTimeInput,
   parseClockToMinutes,
 } from "@/lib/courseModel";
@@ -58,7 +57,6 @@ export function StartTimeControls({ distances, startTimes, onChange }: Props) {
                   +
                 </button>
               </div>
-              <span className={styles.preview}>{formatClock(minutes)}</span>
             </li>
           );
         })}
