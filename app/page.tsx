@@ -115,11 +115,19 @@ export default function Home() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <p className={styles.brand}>Swim Across America</p>
-          <h1 className={styles.product}>Course Density Modeler</h1>
-          <p className={styles.tagline}>
-            Estimate how many swimmers are on course at any time — by distance.
-          </p>
+          <img
+            className={styles.logo}
+            src="/saa_blue_logo.jpg"
+            alt="Swim Across America"
+            width={420}
+            height={156}
+          />
+          <div className={styles.headerCopy}>
+            <h1 className={styles.product}>Course Density Modeler</h1>
+            <p className={styles.tagline}>
+              Estimate how many swimmers are on course at any time — by distance.
+            </p>
+          </div>
         </div>
       </header>
 
