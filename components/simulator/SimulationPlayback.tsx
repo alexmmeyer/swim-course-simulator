@@ -296,10 +296,45 @@ export function SimulationPlayback({
     <div className={styles.playback}>
       <div className={styles.toolbar}>
         <h2 className={styles.title}>Congestion simulation</h2>
-        <button type="button" className={styles.linkBtn} onClick={onRebuild}>
-          Edit courses
-        </button>
+        <div className={styles.toolbarActions}>
+          {exporting ? (
+            <button
+              type="button"
+              className={styles.secondary}
+              onClick={cancelExport}
+            >
+              Cancel export
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.exportBtn}
+              onClick={() => void handleExportVideo()}
+              disabled={!canExportVideo()}
+              title={
+                canExportVideo()
+                  ? "Download the simulation as a video (WebM or MP4)"
+                  : "Video export is not supported in this browser"
+              }
+            >
+              Download video
+            </button>
+          )}
+          <button type="button" className={styles.linkBtn} onClick={onRebuild}>
+            Edit courses
+          </button>
+        </div>
       </div>
+      {exporting && (
+        <p className={styles.exportStatus} aria-live="polite">
+          Exporting… {Math.round(exportProgress * 100)}%
+          <span className={styles.exportHint}>
+            {" "}
+            ({PLAYBACK_SECONDS[speed]}s)
+          </span>
+        </p>
+      )}
+      {exportError && <p className={styles.exportError}>{exportError}</p>}
 
       <CourseCanvas
         backgroundImageUrl={backgroundImageUrl}
@@ -340,29 +375,6 @@ export function SimulationPlayback({
           >
             Restart
           </button>
-          {exporting ? (
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={cancelExport}
-            >
-              Cancel export
-            </button>
-          ) : (
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={() => void handleExportVideo()}
-              disabled={!canExportVideo()}
-              title={
-                canExportVideo()
-                  ? "Download the simulation as a video (WebM or MP4)"
-                  : "Video export is not supported in this browser"
-              }
-            >
-              Export video
-            </button>
-          )}
         </div>
 
         <fieldset className={styles.speed} disabled={exporting}>
@@ -387,17 +399,6 @@ export function SimulationPlayback({
           ))}
         </fieldset>
       </div>
-
-      {exporting && (
-        <p className={styles.exportStatus} aria-live="polite">
-          Exporting video… {Math.round(exportProgress * 100)}%
-          <span className={styles.exportHint}>
-            {" "}
-            Uses the selected speed ({PLAYBACK_SECONDS[speed]}s).
-          </span>
-        </p>
-      )}
-      {exportError && <p className={styles.exportError}>{exportError}</p>}
 
       <label className={styles.dotSize}>
         <span className={styles.dotSizeLabel}>Dot size</span>

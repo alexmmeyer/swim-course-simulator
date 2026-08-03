@@ -1,6 +1,12 @@
 export const brand = {
-  red: "#ef4036",
-  blue: "#013e7f",
+  /** PMS 032C */
+  red: "#ef4135",
+  /** PMS 281C */
+  blue: "#003e7e",
+  /** PMS 299C */
+  brightBlue: "#009ddc",
+  /** PMS 2905C */
+  lightBlue: "#8cd2f4",
   white: "#ffffff",
   navyText: "#012a56",
   muted: "#6b7a8d",
@@ -14,13 +20,13 @@ export const brand = {
 
 /** On-brand distance series colors (blue/red family). */
 export const DISTANCE_COLORS = [
-  "#013e7f",
-  "#ef4036",
-  "#2a6fad",
+  "#003e7e",
+  "#ef4135",
+  "#009ddc",
   "#c73a32",
   "#5b8fc7",
   "#8b1e18",
-  "#7aa8d4",
+  "#8cd2f4",
 ] as const;
 
 export function colorForDistance(index: number): string {

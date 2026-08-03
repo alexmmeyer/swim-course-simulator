@@ -6,10 +6,39 @@
 
 .toolbar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.toolbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.exportBtn {
+  appearance: none;
+  border: 1px solid var(--saa-bright-blue);
+  background: var(--saa-bright-blue);
+  color: var(--saa-white);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.exportBtn:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.exportBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .title {
