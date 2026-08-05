@@ -121,9 +121,9 @@ export function CourseChart({ points, distances, colorDistances }: Props) {
 
   if (points.length === 0 || distances.length === 0) {
     return (
-      <section className={styles.section}>
-        <h2 className={styles.chartTitle}>TOTAL SWIMMERS IN THE WATER</h2>
-        <p className={styles.empty}>
+      <section className={styles.emptyState}>
+        <h2 className={styles.emptyTitle}>Density chart</h2>
+        <p className={styles.emptyCopy}>
           Upload participant data to see course density over time.
         </p>
       </section>
@@ -132,7 +132,7 @@ export function CourseChart({ points, distances, colorDistances }: Props) {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.chartTitle}>TOTAL SWIMMERS IN THE WATER</h2>
+      <h2 className={styles.chartTitle}>SWIMMERS ON COURSE</h2>
       <div className={styles.chartWrap}>
         <ResponsiveContainer width="100%" height={400}>
           <AreaChart

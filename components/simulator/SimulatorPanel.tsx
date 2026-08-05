@@ -50,7 +50,7 @@ export function SimulatorPanel({
   if (participants.length === 0 || distances.length === 0) {
     return (
       <section className={styles.empty}>
-        <h2 className={styles.emptyTitle}>Congestion simulator</h2>
+        <h2 className={styles.emptyTitle}>Swimulator</h2>
         <p>
           Upload participant data and set start times to build courses and run a
           spatial time-lapse.

@@ -178,7 +178,7 @@ export default function Home() {
               }
               onClick={() => setMainTab("simulator")}
             >
-              Congestion simulator
+              Swimulator
             </button>
           </div>
 

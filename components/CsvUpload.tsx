@@ -40,7 +40,7 @@ export function CsvUpload({ onFileText, fileName, summary, errors }: Props) {
       </div>
       <p className={styles.hint}>
         CSV with <code>distance</code> and <code>expected_finish_time</code>{" "}
-        (optional <code>name</code>)
+        (extraneous columns such as <code>name</code> and <code>place</code> are ok, but ignored)
       </p>
 
       <div

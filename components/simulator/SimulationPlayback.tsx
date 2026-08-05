@@ -294,7 +294,7 @@ export function SimulationPlayback({
   return (
     <div className={styles.playback}>
       <div className={styles.toolbar}>
-        <h2 className={styles.title}>Congestion simulation</h2>
+        <h2 className={styles.title}>Swimulation</h2>
         <div className={styles.toolbarActions}>
           {exporting ? (
             <button
