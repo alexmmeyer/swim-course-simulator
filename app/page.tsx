@@ -187,6 +187,7 @@ export default function Home() {
               <CourseChart
                 points={series.points}
                 distances={series.distances}
+                colorDistances={distances}
               />
             ) : (
               <SimulatorPanel

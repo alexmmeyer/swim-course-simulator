@@ -36,9 +36,7 @@ export function BackgroundUpload({ fileName, onImage, onClear }: Props) {
             Clear
           </button>
         </>
-      ) : (
-        <span className={styles.hint}>No image — light blue canvas</span>
-      )}
+      ) : null}
     </div>
   );
 }

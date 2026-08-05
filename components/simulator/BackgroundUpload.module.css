@@ -46,8 +46,3 @@
   cursor: pointer;
   padding: 0.25rem;
 }
-
-.hint {
-  font-size: 0.85rem;
-  color: var(--saa-muted);
-}

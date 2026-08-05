@@ -18,7 +18,10 @@ import styles from "./CourseChart.module.css";
 
 type Props = {
   points: ChartPoint[];
+  /** Stack / series order (e.g. by start time) */
   distances: string[];
+  /** Stable color assignment order (CSV upload order). Defaults to `distances`. */
+  colorDistances?: string[];
 };
 
 type CursorProps = {
@@ -98,14 +101,14 @@ function ChartTooltip(props: TooltipContentProps<number, string>) {
   );
 }
 
-export function CourseChart({ points, distances }: Props) {
+export function CourseChart({ points, distances, colorDistances }: Props) {
   const colorMap = useMemo(() => {
     const map: Record<string, string> = {};
-    distances.forEach((d, i) => {
+    (colorDistances ?? distances).forEach((d, i) => {
       map[d] = colorForDistance(i);
     });
     return map;
-  }, [distances]);
+  }, [colorDistances, distances]);
 
   const xTicks = useMemo(() => {
     return points

@@ -19,7 +19,7 @@
   text-transform: uppercase;
 }
 
-.step {
+.stepLabel {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--saa-navy);
@@ -121,6 +121,53 @@
   background: var(--saa-surface);
   color: var(--saa-muted);
   cursor: not-allowed;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stepBtn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--saa-border);
+  background: var(--saa-white);
+  color: var(--saa-blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.stepBtn:hover {
+  border-color: var(--saa-blue);
+}
+
+.stepperInput {
+  width: 4.5rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--saa-border);
+  color: var(--saa-navy);
+  background: var(--saa-white);
+  border-radius: 2px;
+}
+
+.stepperInput::-webkit-outer-spin-button,
+.stepperInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepperInput[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .error {

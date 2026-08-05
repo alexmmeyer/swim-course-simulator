@@ -93,6 +93,7 @@ export function SimulatorPanel({
       paths={activePaths}
       courseByDistance={courseByDistance}
       backgroundImageUrl={backgroundImageUrl}
+      distanceOrder={distances}
       onRebuild={() => {
         onPathsChange([]);
         onCourseByDistanceChange({});

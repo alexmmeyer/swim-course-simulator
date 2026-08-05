@@ -59,7 +59,7 @@ export function CourseWizard({
   }));
   const [lapLength, setLapLength] = useState("0.5");
   const [unit, setUnit] = useState<LengthUnit>("miles");
-  const [laps, setLaps] = useState("1");
+  const [laps, setLaps] = useState(1);
   const [formError, setFormError] = useState<string | null>(null);
 
   const distance =
@@ -109,7 +109,7 @@ export function CourseWizard({
       setLapLength("0.5");
       setUnit("miles");
     }
-    setLaps("1");
+    setLaps(1);
     setFormError(null);
   }
 
@@ -130,7 +130,7 @@ export function CourseWizard({
   function submitDetails() {
     if (phase.kind !== "details") return;
     const lengthNum = Number(lapLength);
-    const lapsNum = Math.round(Number(laps));
+    const lapsNum = Math.round(laps);
     const feet = lengthToFeet(lengthNum, unit);
     if (!(feet > 0)) {
       setFormError("Enter a valid lap length greater than zero.");
@@ -171,7 +171,7 @@ export function CourseWizard({
     <div className={styles.wizard}>
       <div className={styles.header}>
         <h2 className={styles.title}>Build your course</h2>
-        <p className={styles.step}>{stepLabel}</p>
+        <p className={styles.stepLabel}>{stepLabel}</p>
       </div>
 
       <BackgroundUpload
@@ -333,15 +333,37 @@ export function CourseWizard({
             </label>
             <label className={styles.label}>
               Laps
-              <input
-                type="number"
-                min="1"
-                step="1"
-                className={styles.input}
-                value={laps}
-                onChange={(e) => setLaps(e.target.value)}
-                required
-              />
+              <div className={styles.stepper}>
+                <button
+                  type="button"
+                  className={styles.stepBtn}
+                  aria-label="Decrease laps"
+                  onClick={() => setLaps((n) => Math.max(1, n - 1))}
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  step={1}
+                  className={styles.stepperInput}
+                  value={laps}
+                  onChange={(e) => {
+                    const next = Number.parseInt(e.target.value, 10);
+                    if (Number.isFinite(next) && next >= 1) setLaps(next);
+                    if (e.target.value === "") setLaps(1);
+                  }}
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.stepBtn}
+                  aria-label="Increase laps"
+                  onClick={() => setLaps((n) => n + 1)}
+                >
+                  +
+                </button>
+              </div>
             </label>
           </div>
           {formError && <p className={styles.error}>{formError}</p>}

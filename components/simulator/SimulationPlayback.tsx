@@ -1,7 +1,7 @@
 "use client";
 
 import { colorForDistance } from "@/lib/brand";
-import { formatClock, orderedDistances } from "@/lib/courseModel";
+import { formatClock } from "@/lib/courseModel";
 import {
   canExportVideo,
   downloadBlob,
@@ -46,6 +46,8 @@ type Props = {
   paths: CoursePath[];
   courseByDistance: Record<string, DistanceCourseConfig>;
   backgroundImageUrl: string | null;
+  /** CSV upload order — stable color / legend association */
+  distanceOrder: string[];
   onRebuild: () => void;
 };
 
@@ -55,6 +57,7 @@ export function SimulationPlayback({
   paths,
   courseByDistance,
   backgroundImageUrl,
+  distanceOrder,
   onRebuild,
 }: Props) {
   const timeWindow = useMemo(
@@ -67,17 +70,13 @@ export function SimulationPlayback({
   );
 
   const pathMap = useMemo(() => new Map(paths.map((p) => [p.id, p])), [paths]);
-  const legendDistances = useMemo(
-    () => orderedDistances(configs),
-    [configs],
-  );
   const distanceIndex = useMemo(() => {
     const map: Record<string, number> = {};
-    legendDistances.forEach((d, i) => {
+    distanceOrder.forEach((d, i) => {
       map[d] = i;
     });
     return map;
-  }, [legendDistances]);
+  }, [distanceOrder]);
 
   const [speed, setSpeed] = useState<Speed>("medium");
   const [playing, setPlaying] = useState(false);
@@ -199,7 +198,7 @@ export function SimulationPlayback({
     exportAbortRef.current = abort;
 
     const colorByDistance: Record<string, string> = {};
-    legendDistances.forEach((d, i) => {
+    distanceOrder.forEach((d, i) => {
       colorByDistance[d] = colorForDistance(i);
     });
 
@@ -210,7 +209,7 @@ export function SimulationPlayback({
         roster,
         colorByDistance,
         backgroundImageUrl,
-        legend: legendDistances.map((d, i) => ({
+        legend: distanceOrder.map((d, i) => ({
           distance: d,
           color: colorForDistance(i),
         })),
@@ -346,7 +345,7 @@ export function SimulationPlayback({
       />
 
       <ul className={styles.distanceLegend} aria-label="Distance colors">
-        {legendDistances.map((d, i) => (
+        {distanceOrder.map((d, i) => (
           <li key={d} className={styles.legendItem}>
             <span
               className={styles.legendSwatch}
